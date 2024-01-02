@@ -14,11 +14,11 @@ const pool = mysql.createPool({
 
 // Items
 export async function uploadItems(
-    name, image, price, discount, weight, ingredients, howtouse, benefits, category
+    name, image, price, discount, weight, ingredients, howtouse, benefits, category,availability
 ) {
     const insert = await
         pool.query(
-            'INSERT INTO plush.items (name, image, price, discountPrice, weight, ingredients, howtouse, benefits, category) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
-            [name, image, price, discount, weight, ingredients, howtouse, benefits, category]
+            'INSERT INTO plush.items (name, image, price, discountPrice, weight, ingredients, howtouse, benefits, category, availability) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ? ,?)',
+            [name, image, price, discount, weight, ingredients, howtouse, benefits, category,availability]
         )
 }

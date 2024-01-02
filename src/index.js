@@ -1,22 +1,45 @@
 // Purpose: Entry point for the application
 import express from 'express'
 import { uploadItems } from '../database.js'
+import path from 'path'
+import multer from 'multer'
 
 const app = express();
 app.use(express.static('uploads'));
 
 app.use(express.json());
+app.use(express.static('uploads'));
 
-app.get ('/', (req, res) => {
-   res.send("Hello World")
-});
+const __dirname = path.resolve();
+app.use('/uploads', express.static(__dirname + '/uploads'));
+var storage = multer.diskStorage({
+   destination: function (req, file, cb) {
+      cb(null, 'uploads')
+   },
+   filename: function (req, file, cb) {
+      cb(null, file.originalname)
+   }
+})
+var upload = multer({ storage: storage })
+var cpUpload = upload.fields([
+   { name: 'file', maxCount: 1 },
+   { name: 'Text', maxCount: 1 },
+   { name: 'Text', maxCount: 1 },
+   { name: 'Text', maxCount: 1 },
+   { name: 'Text', maxCount: 1 },
+   { name: 'Text', maxCount: 1 },
+   { name: 'Text', maxCount: 1 },
+   { name: 'Text', maxCount: 1 },
+   { name: 'Text', maxCount: 1 },
+])
 
-app.post('/upload', async (req, res) => {
-   console.log(req.body);
-   const items = await uploadItems(
-      req.body.name, req.body.image, req.body.price, req.body.discountPrice, req.body.weight, req.body.ingredients, req.body.howtouse, req.body.benefits, req.body.category
-   );
-   res.send("success")
+app.post('/upload', cpUpload, async (req, res) => {
+   const { file } = req.files;
+   const { name, price, discountPrice, weight, ingredients, howtouse, benefits, category , availability } = req.body;
+   console.log(file[0].filename)
+   console.log(name)
+   const items = await uploadItems(name, file[0].filename, price, discountPrice, weight, ingredients, howtouse, benefits, category ,availability);
+   res.status(200).send("success");
 });
 
 const port = process.env.PORT || 3000
