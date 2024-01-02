@@ -35,10 +35,9 @@ var cpUpload = upload.fields([
 
 app.post('/upload', cpUpload, async (req, res) => {
    const { file } = req.files;
-   const { name, price, discountPrice, weight, ingredients, howtouse, benefits, category , availability } = req.body;
-   console.log(file[0].filename)
+   const { name, image ,price, discountPrice, weight, ingredients, howtouse, benefits, category , availability } = req.body;
    console.log(name)
-   const items = await uploadItems(name, file[0].filename, price, discountPrice, weight, ingredients, howtouse, benefits, category ,availability);
+   const items = await uploadItems(name, image, price, discountPrice, weight, ingredients, howtouse, benefits, category ,availability);
    res.status(200).send("success");
 });
 
