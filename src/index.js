@@ -9,6 +9,13 @@ app.use(express.static('uploads'));
 
 app.use(express.json({limit: '50mb'}));
 app.use(express.static('uploads'));
+app.use(function (req, res, next) {
+   res.header("Access-Control-Allow-Origin", "*");
+   res.header("Access-Control-Allow-Headers", "*");
+   res.header("Access-Control-Allow-Methods", "*");
+   next();
+   
+});
 
 const __dirname = path.resolve();
 app.use('/uploads', express.static(__dirname + '/uploads'));
