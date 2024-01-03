@@ -14,11 +14,17 @@ const pool = mysql.createPool({
 
 // Items
 export async function uploadItems(
-    name, image, price, discount, weight, ingredients, howtouse, benefits, category,availability
+    name, image, price1, price2, price3, discount, weight1, weight2, weight3, ingredients, howtouse, benefits, category, availability
 ) {
     const insert = await
         pool.query(
-            'INSERT INTO plush.items (name, image, price, discountPrice, weight, ingredients, howtouse, benefits, category, availability) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ? ,?)',
-            [name, image, price, discount, weight, ingredients, howtouse, benefits, category,availability]
+            'INSERT INTO plush.items (name, image, price1, price2, price3, discountPrice, weight1,weight2,weight3, ingredients, howtouse, benefits, category, availability) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ? ,?)',
+            [name, image, price1, price2, price3, discount, weight1, weight2, weight3, ingredients, howtouse, benefits, category, availability]
         )
+}
+
+export async function getProducrs(category) {
+    const query = await
+        pool.query(`SELECT * FROM plush.items WHERE category like '${category}'`)
+    return query[0];
 }

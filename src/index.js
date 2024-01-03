@@ -1,6 +1,6 @@
 // Purpose: Entry point for the application
 import express from 'express'
-import { uploadItems } from '../database.js'
+import { uploadItems, getProducrs } from '../database.js'
 import path from 'path'
 import multer from 'multer'
 
@@ -35,10 +35,19 @@ var cpUpload = upload.fields([
 
 app.post('/upload', cpUpload, async (req, res) => {
    const { file } = req.files;
-   const { name, image ,price, discountPrice, weight, ingredients, howtouse, benefits, category , availability } = req.body;
+   const { name, image, price1, price2, price3, discountPrice, weight1, weight2, weight3, ingredients, howtouse, benefits, category, availability } = req.body;
    console.log(name)
-   const items = await uploadItems(name, image, price, discountPrice, weight, ingredients, howtouse, benefits, category ,availability);
+   const items = await uploadItems(name, image, price1, price2, price3, discountPrice, weight1, weight2, weight3, ingredients, howtouse, benefits, category, availability);
    res.status(200).send("success");
+});
+
+app.get('/product', async (req, res) => {
+   const { category } = req.query;
+   const items = await getProducrs(category);
+   console.log(items)
+   res.status(200).send({
+      "items": items
+   });
 });
 
 const port = process.env.PORT || 3000
