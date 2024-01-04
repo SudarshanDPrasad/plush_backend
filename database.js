@@ -32,6 +32,6 @@ export async function getProducrs(category) {
 export async function editProduct(id, name, image, price1, price2, price3, discount, weight1, weight2, weight3, ingredients, howtouse, benefits, category, availability, bestSeller
 ) {
     const query = await
-        pool.query(`UPDATE plush.items SET name = '${name}', image = '${image}', price1 = '${price1}', price2 = '${price2}', price3 = '${price3}', discountPrice = '${discount}', weight1 = '${weight1}', weight2 = '${weight2}', weight3 = '${weight3}', ingredients = '${ingredients}', howtouse = '${howtouse}', benefits = '${benefits}', category = '${category}', availability = '${availability}' , bestSeller = ${bestSeller} WHERE id = '${id}'`)
+        pool.query(`UPDATE plush.items SET name = '${name}', image = '${image}', price1 = '${price1}', price2 = '${price2}', price3 = '${price3}', discountPrice = '${discount}', weight1 = '${weight1}', weight2 = '${weight2}', weight3 = '${weight3}', ingredients = '${ingredients}', howtouse = '${howtouse}', benefits = '${benefits}', category = '${category}', availability = '${availability}' , bestSeller = '${bestSeller}' WHERE id = '${id}'`)
     return query[0];
 }
