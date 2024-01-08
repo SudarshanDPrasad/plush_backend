@@ -35,3 +35,19 @@ export async function editProduct(id, name, image, price1, price2, price3, disco
         pool.query(`UPDATE plush.items SET name = '${name}', image = '${image}', price1 = '${price1}', price2 = '${price2}', price3 = '${price3}', discountPrice = '${discount}', weight1 = '${weight1}', weight2 = '${weight2}', weight3 = '${weight3}', ingredients = '${ingredients}', howtouse = '${howtouse}', benefits = '${benefits}', category = '${category}', availability = '${availability}' , bestSeller = '${bestSeller}' WHERE id = '${id}'`)
     return query[0];
 }
+
+export async function customerOrders(
+    name,address,orders,phoneNumber,totalAmount
+){
+    const query = await
+        pool.query(
+            'INSERT INTO plush.orders(name,address,orders,phoneNumber,totalAmount) VALUES (?, ?, ?, ?, ?)',
+            [name,address,orders,phoneNumber,totalAmount]
+        )
+}
+
+export async function getOrders() {
+    const query = await
+        pool.query(`SELECT * FROM plush.orders`)
+    return query[0];
+}

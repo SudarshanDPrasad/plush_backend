@@ -1,20 +1,20 @@
 // Purpose: Entry point for the application
 import express from 'express'
-import { uploadItems, getProducrs,editProduct } from '../database.js'
+import { uploadItems, getProducrs, editProduct, customerOrders, getOrders } from '../database.js'
 import path from 'path'
 import multer from 'multer'
 
 const app = express();
 app.use(express.static('uploads'));
 
-app.use(express.json({limit: '50mb'}));
+app.use(express.json({ limit: '50mb' }));
 app.use(express.static('uploads'));
 app.use(function (req, res, next) {
    res.header("Access-Control-Allow-Origin", "*");
    res.header("Access-Control-Allow-Headers", "*");
    res.header("Access-Control-Allow-Methods", "*");
    next();
-   
+
 });
 
 const __dirname = path.resolve();
@@ -44,7 +44,7 @@ app.post('/upload', cpUpload, async (req, res) => {
    const { file } = req.files;
    const { name, image, price1, price2, price3, discountPrice, weight1, weight2, weight3, ingredients, howtouse, benefits, category, availability, bestSeller } = req.body;
    console.log(name)
-   const items = await uploadItems(name, image, price1, price2, price3, discountPrice, weight1, weight2, weight3, ingredients, howtouse, benefits, category, availability,bestSeller);
+   const items = await uploadItems(name, image, price1, price2, price3, discountPrice, weight1, weight2, weight3, ingredients, howtouse, benefits, category, availability, bestSeller);
    res.status(200).send("success");
 });
 
@@ -58,9 +58,25 @@ app.get('/product', async (req, res) => {
 });
 
 app.patch('/updateProduct', async (req, res) => {
-   const { id, name, image, price1, price2, price3, discountPrice, weight1, weight2, weight3, ingredients, howtouse, benefits, category, availability,bestSeller } = req.body;
-   const items = await editProduct(id, name, image, price1, price2, price3, discountPrice, weight1, weight2, weight3, ingredients, howtouse, benefits, category, availability,bestSeller);
+   const { id, name, image, price1, price2, price3, discountPrice, weight1, weight2, weight3, ingredients, howtouse, benefits, category, availability, bestSeller } = req.body;
+   const items = await editProduct(id, name, image, price1, price2, price3, discountPrice, weight1, weight2, weight3, ingredients, howtouse, benefits, category, availability, bestSeller);
    res.status(200).send("success");
+});
+
+app.post('/customerOrders', async (req, res) => {
+   const { name, address, orders, phoneNumber, totalAmount } = req.body;
+   console.log(name)
+   const items = await customerOrders(name, address, orders, phoneNumber, totalAmount);
+   console.log(items);
+   res.status(200).send("success");
+});
+
+app.get('/getOrders', async (req, res) => {
+   const items = await getOrders();
+   console.log(items)
+   res.status(200).send({
+      "items": items
+   });
 });
 
 const port = process.env.PORT || 3000
