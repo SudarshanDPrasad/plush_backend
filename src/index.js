@@ -1,6 +1,13 @@
 // Purpose: Entry point for the application
 import express from 'express'
-import { uploadItems, getProducrs, editProduct, customerOrders, getOrders } from '../database.js'
+import {
+   uploadItems,
+   getProducrs,
+   editProduct,
+   customerOrders,
+   getOrders,
+   searchProduct
+} from '../database.js'
 import path from 'path'
 import multer from 'multer'
 
@@ -74,6 +81,15 @@ app.post('/customerOrders', async (req, res) => {
 app.get('/getOrders', async (req, res) => {
    const items = await getOrders();
    console.log(items)
+   res.status(200).send({
+      "items": items
+   });
+});
+
+app.get('/searchProduct', async (req, res) => {
+   const { product } = req.query;
+   const items = await searchProduct(product);
+   console.log(items.length)
    res.status(200).send({
       "items": items
    });

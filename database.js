@@ -51,3 +51,9 @@ export async function getOrders() {
         pool.query(`SELECT * FROM plush.orders`)
     return query[0];
 }
+
+export async function searchProduct(product) {
+    const query = await
+        pool.query(`SELECT * FROM plush.items WHERE name like '%${product}%'`)
+    return query[0];
+}
