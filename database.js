@@ -57,3 +57,15 @@ export async function searchProduct(product) {
         pool.query(`SELECT * FROM plush.items WHERE name like '%${product}%'`)
     return query[0];
 }
+
+export async function uploafFeedBack(name,feedback,stars){
+    const query = await
+        pool.query(`INSERT INTO plush.feedback (name, feedback, stars) VALUES (?, ?, ?)`,[name,feedback,stars])
+    return query[0];
+}
+
+export async function getFeedBack(){
+    const query = await
+        pool.query(`SELECT * FROM plush.feedback`)
+    return query[0];
+}

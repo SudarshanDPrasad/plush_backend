@@ -6,7 +6,9 @@ import {
    editProduct,
    customerOrders,
    getOrders,
-   searchProduct
+   searchProduct,
+   uploafFeedBack,
+   getFeedBack
 } from '../database.js'
 import path from 'path'
 import multer from 'multer'
@@ -47,6 +49,7 @@ var cpUpload = upload.fields([
    { name: 'Text', maxCount: 1 },
 ])
 
+// Upload Product
 app.post('/upload', cpUpload, async (req, res) => {
    const { file } = req.files;
    const { name, image, price1, price2, price3, discountPrice, weight1, weight2, weight3, ingredients, howtouse, benefits, category, availability, bestSeller } = req.body;
@@ -55,21 +58,26 @@ app.post('/upload', cpUpload, async (req, res) => {
    res.status(200).send("success");
 });
 
+// Search Product List
 app.get('/product', async (req, res) => {
    const { category } = req.query;
    const items = await getProducrs(category);
    console.log(items)
-   res.status(200).send({
-      "items": items
-   });
+   setTimeout(() => {
+      res.status(200).send({
+         "items": items
+      });
+   }, 1000);
 });
 
+// Update Product
 app.patch('/updateProduct', async (req, res) => {
    const { id, name, image, price1, price2, price3, discountPrice, weight1, weight2, weight3, ingredients, howtouse, benefits, category, availability, bestSeller } = req.body;
    const items = await editProduct(id, name, image, price1, price2, price3, discountPrice, weight1, weight2, weight3, ingredients, howtouse, benefits, category, availability, bestSeller);
    res.status(200).send("success");
 });
 
+// Customer Orders
 app.post('/customerOrders', async (req, res) => {
    const { name, address, orders, phoneNumber, totalAmount } = req.body;
    console.log(name)
@@ -78,6 +86,7 @@ app.post('/customerOrders', async (req, res) => {
    res.status(200).send("success");
 });
 
+// Get Orders
 app.get('/getOrders', async (req, res) => {
    const items = await getOrders();
    console.log(items)
@@ -86,10 +95,29 @@ app.get('/getOrders', async (req, res) => {
    });
 });
 
+// Search Product
 app.get('/searchProduct', async (req, res) => {
    const { product } = req.query;
    const items = await searchProduct(product);
    console.log(items.length)
+   res.status(200).send({
+      "items": items
+   });
+});
+
+
+// FeedBack
+app.post('/feedBack', async (req, res) => {
+   const { name, feedback, stars } = req.body;
+   const items = await uploafFeedBack(name, feedback, stars);
+   console.log(items);
+   res.status(200).send("success");
+});
+
+// Get Feedback
+app.get('/getFeedBack', async (req, res) => {
+   const items = await getFeedBack();
+   console.log(items)
    res.status(200).send({
       "items": items
    });
