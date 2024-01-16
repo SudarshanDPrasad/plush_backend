@@ -37,12 +37,12 @@ export async function editProduct(id, name, image, price1, price2, price3, disco
 }
 
 export async function customerOrders(
-    name,address,orders,phoneNumber,totalAmount
+    name,address,orders,phoneNumber,totalAmount,image
 ){
     const query = await
         pool.query(
-            'INSERT INTO plush.orders(name,address,orders,phoneNumber,totalAmount) VALUES (?, ?, ?, ?, ?)',
-            [name,address,orders,phoneNumber,totalAmount]
+            'INSERT INTO plush.orders(name,address,orders,phoneNumber,totalAmount,image) VALUES (?, ?, ?, ?, ?,?)',
+            [name,address,orders,phoneNumber,totalAmount,image]
         )
 }
 
@@ -67,5 +67,29 @@ export async function uploafFeedBack(name,feedback,stars){
 export async function getFeedBack(){
     const query = await
         pool.query(`SELECT * FROM plush.feedback`)
+    return query[0];
+}
+
+export async function createUser(
+    name,mobileNumber,password
+){
+    const query = await
+        pool.query(
+            'INSERT INTO plush.users(name,mobileNumber,password) VALUES (?, ?, ?)',
+            [name,mobileNumber,password]
+        )
+}
+
+export async function getUser(mobileNumber,password){
+    const query = await
+        pool.query(`SELECT * FROM plush.users WHERE mobileNumber = '${mobileNumber}' AND password = '${password}'`)
+    return query[0];
+}
+
+export async function getUserOrders(
+    mobileNumber
+){
+    const query = await
+        pool.query(`SELECT * FROM plush.orders WHERE phoneNumber = '${mobileNumber}'`)
     return query[0];
 }

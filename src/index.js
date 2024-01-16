@@ -8,7 +8,10 @@ import {
    getOrders,
    searchProduct,
    uploafFeedBack,
-   getFeedBack
+   getFeedBack,
+   createUser,
+   getUser,
+   getUserOrders
 } from '../database.js'
 import path from 'path'
 import multer from 'multer'
@@ -79,9 +82,9 @@ app.patch('/updateProduct', async (req, res) => {
 
 // Customer Orders
 app.post('/customerOrders', async (req, res) => {
-   const { name, address, orders, phoneNumber, totalAmount } = req.body;
+   const { name, address, orders, phoneNumber, totalAmount, image} = req.body;
    console.log(name)
-   const items = await customerOrders(name, address, orders, phoneNumber, totalAmount);
+   const items = await customerOrders(name, address, orders, phoneNumber, totalAmount,image);
    console.log(items);
    res.status(200).send("success");
 });
@@ -121,6 +124,60 @@ app.get('/getFeedBack', async (req, res) => {
    res.status(200).send({
       "items": items
    });
+});
+
+// Create User
+app.post('/createUser', async (req, res) => {
+   const { name, mobileNumber, password } = req.body;
+   if (password.length < 6) {
+      res.status(200).send({
+         "message": "Password should be atleast 6 characters"
+      });
+      return;
+   } else if (mobileNumber.length < 10) {
+      res.status(200).send({
+         "message": "Mobile Number should be atleast 10 characters"
+      });
+      return;
+   } else if (name.length < 3) {
+      res.status(200).send({
+         "message": "Name should be atleast 3 characters"
+      });
+      return;
+   } else {
+      const userExist = await getUser(mobileNumber, password);
+      if (userExist.length > 0) {
+         res.status(200).send({
+            "message": "User already exists"
+         });
+         return;
+      } else {
+         const user = await createUser(name, mobileNumber, password);
+         console.log(user[0]);
+         res.status(200).send({
+            "message": "success"
+         });
+      }
+   }
+});
+
+// Get User 
+app.get('/getUser', async (req, res) => {
+   const { mobileNumber, password } = req.query;
+   const user = await getUser(mobileNumber, password);
+   const userOrders = await getUserOrders(mobileNumber);
+   console.log(userOrders)
+   console.log(user)
+   if (user.length > 0) {
+      res.status(200).send({
+         "user": user[0],
+         "userOrders": userOrders
+      });
+   } else {
+      res.status(200).send({
+         "message": "User not found"
+      });
+   }
 });
 
 const port = process.env.PORT || 3000
