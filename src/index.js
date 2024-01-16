@@ -166,18 +166,26 @@ app.get('/getUser', async (req, res) => {
    const { mobileNumber, password } = req.query;
    const user = await getUser(mobileNumber, password);
    const userOrders = await getUserOrders(mobileNumber);
-   console.log(userOrders)
    console.log(user)
    if (user.length > 0) {
       res.status(200).send({
          "user": user[0],
-         "userOrders": userOrders
+         "userOrders": userOrders[0]
       });
    } else {
       res.status(200).send({
          "message": "User not found"
       });
    }
+});
+
+app.get('/userOrders', async (req, res) => {
+   const { mobileNumber } = req.query;
+   const userOrders = await getUserOrders(mobileNumber);
+   console.log(userOrders)
+   res.status(200).send({
+      "userOrders": userOrders[0]
+   });
 });
 
 const port = process.env.PORT || 3000

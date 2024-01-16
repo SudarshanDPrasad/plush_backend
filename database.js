@@ -91,5 +91,5 @@ export async function getUserOrders(
 ){
     const query = await
         pool.query(`SELECT * FROM plush.orders WHERE phoneNumber = '${mobileNumber}'`)
-    return query[0];
+    return query;
 }
